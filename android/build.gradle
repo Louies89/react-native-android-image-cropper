@@ -1,0 +1,47 @@
+import groovy.json.JsonSlurper
+
+def computeVersionName() {
+    // dynamically retrieve version from package.json
+    def slurper = new JsonSlurper()
+    def json = slurper.parse(file('../package.json'), "utf-8")
+    return json.version
+}
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.2.3'
+    }
+}
+
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion project.hasProperty('compileSdkVersion') ? project.compileSdkVersion : 27       //Previously 26
+    buildToolsVersion project.hasProperty('buildToolsVersion') ? project.buildToolsVersion : '27.0.3' //Previously 26.0.1
+
+    defaultConfig {
+        minSdkVersion project.hasProperty('minSdkVersion') ? project.minSdkVersion : 16
+        targetSdkVersion project.hasProperty('targetSdkVersion') ? project.targetSdkVersion : 23
+        versionCode 1
+        // get version name from package.json version
+        versionName computeVersionName()
+    }
+    lintOptions {
+        abortOnError false
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    def reactNativeVersion = project.hasProperty('reactNativeVersion') ? project.reactNativeVersion : "+"
+		
+    compile "com.facebook.react:react-native:$reactNativeVersion" //Previously +
+    compile 'com.theartofdev.edmodo:android-image-cropper:2.6.0'
+}

@@ -1,0 +1,100 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "react-native-android-image-cropper",
+        "scope": null,
+        "escapedName": "react-native-android-image-cropper",
+        "name": "react-native-android-image-cropper",
+        "rawSpec": "",
+        "spec": "latest",
+        "type": "tag"
+      },
+      "E:\\2nd Start\\ReactNative\\clenet"
+    ]
+  ],
+  "_from": "react-native-android-image-cropper@latest",
+  "_id": "react-native-android-image-cropper@0.2.4",
+  "_inCache": true,
+  "_location": "/react-native-android-image-cropper",
+  "_nodeVersion": "8.0.0",
+  "_npmOperationalInternal": {
+    "host": "s3://npm-registry-packages",
+    "tmp": "tmp/react-native-android-image-cropper_0.2.4_1521800850059_0.0817802498058624"
+  },
+  "_npmUser": {
+    "name": "zainozzaini",
+    "email": "zainoz.zaini@gmail.com"
+  },
+  "_npmVersion": "5.6.0",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "react-native-android-image-cropper",
+    "scope": null,
+    "escapedName": "react-native-android-image-cropper",
+    "name": "react-native-android-image-cropper",
+    "rawSpec": "",
+    "spec": "latest",
+    "type": "tag"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/react-native-android-image-cropper/-/react-native-android-image-cropper-0.2.4.tgz",
+  "_shasum": "b9bea17e29a0d7cdd13f0303518e90f57ba33b60",
+  "_shrinkwrap": null,
+  "_spec": "react-native-android-image-cropper",
+  "_where": "E:\\2nd Start\\ReactNative\\clenet",
+  "author": {
+    "name": "Zainoz.Zaini"
+  },
+  "bugs": {
+    "url": "https://github.com/zainozzaini/react-native-android-image-cropper/issues"
+  },
+  "dependencies": {},
+  "description": "React-Native Android Image Cropper =======",
+  "devDependencies": {},
+  "directories": {},
+  "dist": {
+    "integrity": "sha512-+5eglj69zSlDT4nUp0JqVxR2lLR3OphbWMDY/9A8Vf5abjTE086HGFV1/E8Vda08mZhJ/uXjzBLirmDsQmjfGw==",
+    "shasum": "b9bea17e29a0d7cdd13f0303518e90f57ba33b60",
+    "tarball": "https://registry.npmjs.org/react-native-android-image-cropper/-/react-native-android-image-cropper-0.2.4.tgz",
+    "fileCount": 97,
+    "unpackedSize": 8967435
+  },
+  "gitHead": "425b5962acaf023593b31512d1da4a40c90e98de",
+  "homepage": "https://github.com/zainozzaini/react-native-android-image-cropper#readme",
+  "keywords": [
+    "react-native",
+    "android",
+    "library",
+    "image",
+    "crop"
+  ],
+  "license": "Apache-2.0",
+  "maintainers": [
+    {
+      "name": "zainozzaini",
+      "email": "zainoz.zaini@gmail.com"
+    }
+  ],
+  "name": "react-native-android-image-cropper",
+  "optionalDependencies": {},
+  "peerDependencies": {
+    "react-native": ">=0.38.0"
+  },
+  "private": false,
+  "readme": "React-Native Android Image Cropper\n=======\n\n**Powerful** (Zoom, Rotation, Multi-Source), **customizable** (Shape, Limits, Style), **optimized** (Async, Sampling, Matrix) and **simple** image cropping library for React-Native Android Module.\n\n![Crop](https://github.com/zainozzaini/react-native-android-image-cropper/blob/master/rn-android-crop-image.gif?raw=true)\n## Install\n\n`npm i react-native-android-image-cropper@latest --save`\n\n### Automatic Installation\n\n`react-native link`\n\n### Manual Installation\n\n1. Add the following lines to `android/settings.gradle`:\n    ```gradle\n    include ':react-native-android-image-cropper'\n    project(':react-native-android-image-cropper').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-android-image-cropper/android')\n    ```\n\n4. Add the compile line to the dependencies in `android/app/build.gradle`:\n    ```gradle\n    dependencies {\n        compile project(':react-native-android-image-cropper')\n    }\n    ```\n6. Add the import and link the package in `MainApplication.java`:\n    ```java\n    import com.ozdevcode.theartofdev.edmodo.cropper.ImageCropperPackage; // <-- add this import\n\n    public class MainApplication extends Application implements ReactApplication {\n        @Override\n        protected List<ReactPackage> getPackages() {\n            return Arrays.<ReactPackage>asList(\n                new MainReactPackage(),\n                new ImageCropperPackage() // <-- add this line\n              \n            );\n        }\n    }\n    ```\n\n## Usage\n```javascript\nimport ImageCropper from \"react-native-android-image-cropper\";\n\n// More info on all the options is below in the README\n\nvar options = {\n  guideLines:\"on-touch\",\n  cropShape:\"rectangle\",\n  title:'MY EXAMPLE',\n  cropMenuCropButtonTitle:'Done'\n }\n \n /**\n * The first arg is the options object for customization (it can also be null or omitted for default options),\n * The second arg is the callback which sends object: response \n */\n \n  ImageCropper.selectImage(options,(response)=>{\n      //error throwns with response.error\n      if(response&&response.uri){\n        this.setState({imageUri:response.uri})\n      }\n    });\n\n```\n\n### Options\n\nProps | Default| Options/Info\n------ | ---- | ------- \nguideLines (String)|on|off: no guidelines will be displayed. <br>on: guidelines will always be displayed. <br>on-touch: guidelines will be displayed when the crop window is touched. \ncropShape (String)|rectangle|rectangle,oval<br>use FixAspectRatio for Square / Circle.\ntitle (String) |Crop Image|Set window title\ncropMenuCropButtonTitle (String)|Done| Set crop button's title\nrequestedSizeHeight (int)|0|The height to resize the cropped image to\nrequestedSizeWidth (int)|0|The width to resize the cropped image to\nallowCounterRotation (boolean)|false|Allow counter-clockwise rotation during cropping.<br> Note: if rotation is disabled this option has no effect.<br>\nallowFlipping (boolean) |false|Allow flipping during cropping\naspectRatio (array [int,int])|[1,1]|X,Y value of the aspect ratio.<br>* Also sets fixes aspect ratio to TRUE.\ntransferFileToExternalDir (boolean)| false|Move cropped image from cache directory to external directory. Otherwise the image will stored in app cache folder.\nexternalDirectoryName (String)|CropImage|Name of folder if transferFileToExternalDir is true\nautoZoomEnabled (boolean)|true|Auto-zoom functionality is enabled\nmaxZoom (int)|4|The max zoom allowed during cropping\nfixAspectRatio (boolean)|false|Whether the width to height aspect ratio should be maintained or free to change.\ninitialCropWindowPaddingRatio (double)|0.1| 0% - 100%. The initial crop window padding from image borders in percentage of the cropping image dimensions.<br>Set to 0 for initial crop window to fully cover the cropping image.\nborderCornerThickness (double)|2|dp - Thickness of the corner line (in pixels).Set to 0 to remove.\nborderCornerOffset (double)|5|dp - The offset of corner line from crop window border (in pixels). Set to 0 to place on top of the border lines.\nborderCornerLength (double)|12| dp - The length of the corner line away from the corner (in pixels)\nguidelinesThickness (double)|1|dp - The thickness of the guidelines lines (in pixels)\nsnapRadius (double)|3|dp - An edge of the crop window will snap to the corresponding edge of a specified bounding box when the crop window edge is less than or equal to this distance (in pixels) away from the bounding box edge (in pixels).<br>Set 0 to disable snapping\nshowCropOverlay (boolean)|true|Show crop overlay UI what contains the crop window UI surrounded by background over the cropping image\nminCropWindowWidthHeight (array [int,int])|[40,40]|dp - The min size the crop window is allowed to be (in pixels) minimum width/height 10\nflipHorizontally|true|Whether the image should be flipped horizontally\nflipVertically|true|Whether the image should be flipped vertically\n\n\n## License\n\nAndroid library from [ArthurHub/Android-Image-Cropper](https://github.com/ArthurHub/Android-Image-Cropper).\n\nOriginally library forked from [edmodo/cropper](https://github.com/edmodo/cropper).\n\nCopyright 2018 Zainoz Zaini, 2017, Arthur Teplitzki, 2013, Edmodo, Inc.\n\nLicensed under the Apache License, Version 2.0 (the \"License\"); you may not use this work except in compliance with the   License.\nYou may obtain a copy of the License in the LICENSE file, or at:\n\n  http://www.apache.org/licenses/LICENSE-2.0\n\nUnless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS   IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+  "readmeFilename": "README.md",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zainozzaini/react-native-android-image-cropper.git"
+  },
+  "scripts": {
+    "prepare": "rm -rf android/build Example/android/build Example/android/app/build node_modules",
+    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "test": "jest"
+  },
+  "version": "0.2.4"
+}
