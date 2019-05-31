@@ -91,10 +91,5 @@
     "type": "git",
     "url": "git+https://github.com/zainozzaini/react-native-android-image-cropper.git"
   },
-  "scripts": {
-    "prepare": "rm -rf android/build Example/android/build Example/android/app/build node_modules",
-    "start": "node node_modules/react-native/local-cli/cli.js start",
-    "test": "jest"
-  },
   "version": "0.2.4"
 }
