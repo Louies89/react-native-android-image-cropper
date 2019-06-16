@@ -14,8 +14,8 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
-import com.theartofdev.edmodo.cropper.CropImage;
-import com.theartofdev.edmodo.cropper.CropImageView;
+import com.ozdevcode.theartofdev.edmodo.cropper.CropImage;
+import com.ozdevcode.theartofdev.edmodo.cropper.CropImageView;
 import com.ozdevcode.theartofdev.edmodo.utils.ResponseHelper;
 import android.content.pm.PackageManager;
 
@@ -200,66 +200,65 @@ public class ImageCropperModule extends ReactContextBaseJavaModule implements Ac
       return;
     }
 	
-      responseHelper.cleanResponse();
+    responseHelper.cleanResponse();
 
-      Exception error =  null;
-      Uri resultUri= null;
+    Exception error =  null;
+    Uri resultUri= null;
 
-      CropImage.ActivityResult result = CropImage.getActivityResult(data);
+    CropImage.ActivityResult result = CropImage.getActivityResult(data);
 
-      if (resultCode == RESULT_OK) {
-        resultUri = result.getUri();
+    if (resultCode == RESULT_OK) {
+      resultUri = result.getUri();
 		
-		if(options.hasKey("dstPath")){
-		  String dstPath = options.hasKey("dstPath") ? options.getString("dstPath") : getTmpDir();
-		  String fileName = options.hasKey("fileName") ? options.getString("fileName") : "pp-" + System.currentTimeMillis() + ".jpg";
-		  try {
-		    File originalFile = new File(resultUri.getPath());
-		    Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.reactContext.getContentResolver(), resultUri);
-		    
-		    File dir = new File(dstPath);
-		    if (!dir.exists()) {
-		  	dir.mkdirs();
+		  if(options.hasKey("dstPath")){
+		    String dstPath = options.hasKey("dstPath") ? options.getString("dstPath") : getTmpDir();
+		    String fileName = options.hasKey("fileName") ? options.getString("fileName") : "pp-" + System.currentTimeMillis() + ".jpg";
+		    try {
+		      File originalFile = new File(resultUri.getPath());
+		      Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.reactContext.getContentResolver(), resultUri);
+		      
+		      File dir = new File(dstPath);
+		      if (!dir.exists()) {
+		    	dir.mkdirs();
+		      }
+            
+		      File outFile = new File(dstPath, fileName);
+		      outFile.createNewFile();
+		      OutputStream fOut = new FileOutputStream(outFile);
+		      bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
+		      fOut.flush();
+		      fOut.close();
+		      //Delete original file
+		      if (outFile.exists() && originalFile.exists()) {
+		    	  originalFile.delete();
+		      }
+		  	resultUri = Uri.fromFile(outFile);
+		    }catch (Exception ex){
+		      Log.e(TAG,ex.getMessage());
+		      error = ex;
 		    }
-          
-		    File outFile = new File(dstPath, fileName);
-		    outFile.createNewFile();
-		    OutputStream fOut = new FileOutputStream(outFile);
-		    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
-		    fOut.flush();
-		    fOut.close();
-		    //Delete original file
-		    if (outFile.exists() && originalFile.exists()) {
-		  	  originalFile.delete();
-		    }
-			resultUri = Uri.fromFile(outFile);
-		  }catch (Exception ex){
-		    Log.e(TAG,ex.getMessage());
-		    error = ex;
 		  }
-		}
-		else{
-		  Boolean transferFileToExternalDir = options.hasKey("transferFileToExternalDir")&&
-				  options.getBoolean("transferFileToExternalDir");
-		  String externalDirectoryName = this.options.getString("externalDirectoryName");
-		
-          //do transfer
-          if(transferFileToExternalDir){
-            try {
-              File transImage= transferImageToGallery(getReactApplicationContext(), resultUri, externalDirectoryName);
-              if(transImage!=null){
-                resultUri = Uri.fromFile(transImage);
-              }
-            }catch (Exception ex){
-              Log.e(TAG,ex.getMessage());
-              error = ex;
+		  else{
+		    Boolean transferFileToExternalDir = options.hasKey("transferFileToExternalDir")&&
+		  		  options.getBoolean("transferFileToExternalDir");
+		    String externalDirectoryName = this.options.getString("externalDirectoryName");
+		  
+        //do transfer
+        if(transferFileToExternalDir){
+          try {
+            File transImage= transferImageToGallery(getReactApplicationContext(), resultUri, externalDirectoryName);
+            if(transImage!=null){
+              resultUri = Uri.fromFile(transImage);
             }
-          
+          }catch (Exception ex){
+            Log.e(TAG,ex.getMessage());
+            error = ex;
           }
-		}
-      } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-        error= result.getError();
-      }
+        }
+		  }
+    } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+      error= result.getError();
+    }
 
     if(error!=null){
       responseHelper.invokeError(callback,error.getMessage());
@@ -271,37 +270,37 @@ public class ImageCropperModule extends ReactContextBaseJavaModule implements Ac
       responseHelper.putString("path",resultUri.getPath());
       responseHelper.putString("originalUri",result.getOriginalUri().toString());
 	  
-	  String originalPath = result.getOriginalUri().getPath().replace("/raw//","");
-	  // originalPath = result.getOriginalUri().getPath().replace("//","/");
-	  
-	  responseHelper.putString("originalPath",originalPath);
-	  
-	  BitmapFactory.Options options = validateImage(resultUri.getPath());
-	  
-	  
-	  responseHelper.putString("mime",options.outMimeType);
-	  responseHelper.putInt("width",options.outWidth);
-	  responseHelper.putInt("height",options.outHeight);
-	  
-	  File nfile = new File(resultUri.getPath());
-	   
-	  responseHelper.putInt("sizeByte",(int) nfile.length());
-	  responseHelper.putDouble ("sizeKb",((double) nfile.length())/1024);
-	  responseHelper.putDouble("sizeMb",((double) nfile.length())/(1024*1024));
-	  responseHelper.putString("name",nfile.getName());
-	  
-	  
-	  BitmapFactory.Options options1 = validateImage(originalPath);
-	  responseHelper.putString("omime",options1.outMimeType);
-	  responseHelper.putInt("owidth",options1.outWidth);
-	  responseHelper.putInt("oheight",options1.outHeight);
-	  
-	  File ofile = new File(originalPath);
-	  
-	  responseHelper.putInt("osizeByte",(int) ofile.length());
-	  responseHelper.putDouble ("osizeKb",((double) ofile.length())/1024);
-	  responseHelper.putDouble("osizeMb",((double) ofile.length())/(1024*1024));
-	  responseHelper.putString("oname",ofile.getName());
+	    String originalPath = result.getOriginalUri().getPath().replace("/raw//","");
+	    // originalPath = result.getOriginalUri().getPath().replace("//","/");
+	    
+	    responseHelper.putString("originalPath",originalPath);
+	    
+	    BitmapFactory.Options options = validateImage(resultUri.getPath());
+	    
+	    
+	    responseHelper.putString("mime",options.outMimeType);
+	    responseHelper.putInt("width",options.outWidth);
+	    responseHelper.putInt("height",options.outHeight);
+	    
+	    File nfile = new File(resultUri.getPath());
+	     
+	    responseHelper.putInt("sizeByte",(int) nfile.length());
+	    responseHelper.putDouble ("sizeKb",((double) nfile.length())/1024);
+	    responseHelper.putDouble("sizeMb",((double) nfile.length())/(1024*1024));
+	    responseHelper.putString("name",nfile.getName());
+	    
+	    
+	    BitmapFactory.Options options1 = validateImage(originalPath);
+	    responseHelper.putString("omime",options1.outMimeType);
+	    responseHelper.putInt("owidth",options1.outWidth);
+	    responseHelper.putInt("oheight",options1.outHeight);
+	    
+	    File ofile = new File(originalPath);
+	    
+	    responseHelper.putInt("osizeByte",(int) ofile.length());
+	    responseHelper.putDouble ("osizeKb",((double) ofile.length())/1024);
+	    responseHelper.putDouble("osizeMb",((double) ofile.length())/(1024*1024));
+	    responseHelper.putString("oname",ofile.getName());
 	  
       responseHelper.invokeResponse(callback);
     }

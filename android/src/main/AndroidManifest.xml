@@ -4,7 +4,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.CAMERA"/>
     <application>
-        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+        <activity android:name="com.ozdevcode.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat"/>
     </application>
 

@@ -22,7 +22,6 @@ apply plugin: 'com.android.library'
 android {
     compileSdkVersion project.hasProperty('compileSdkVersion') ? project.compileSdkVersion : 27       //Previously 26
     buildToolsVersion project.hasProperty('buildToolsVersion') ? project.buildToolsVersion : '27.0.3' //Previously 26.0.1
-
     defaultConfig {
         minSdkVersion project.hasProperty('minSdkVersion') ? project.minSdkVersion : 16
         targetSdkVersion project.hasProperty('targetSdkVersion') ? project.targetSdkVersion : 23
@@ -43,5 +42,6 @@ dependencies {
     def reactNativeVersion = project.hasProperty('reactNativeVersion') ? project.reactNativeVersion : "+"
 		
     implementation "com.facebook.react:react-native:$reactNativeVersion" //Previously +
-    implementation 'com.theartofdev.edmodo:android-image-cropper:2.6.0'
+    //implementation 'com.theartofdev.edmodo:android-image-cropper:2.6.0' //Included the code from 2.8.0
+    implementation "com.android.support:exifinterface:28.0.0"
 }
